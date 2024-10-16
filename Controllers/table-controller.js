@@ -9,6 +9,7 @@ exports.getTables = async (req, res, next) => {
     }
 }
 
+
 exports.getOneTable = async (req, res, next) => {
     try {
         const { id } = req.params;

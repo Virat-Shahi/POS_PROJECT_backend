@@ -1,3 +1,4 @@
+const prisma = require('../config/prisma')
 const createError = require('../Utils/createError')
 const jwt = require('jsonwebtoken')
 
