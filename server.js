@@ -9,6 +9,7 @@ const menuRouter = require('./Router/menu-router');
 const categoryRouter = require('./Router/category-router');
 const tableRouter = require('./Router/table-router');
 const orderRouter = require('./Router/Order-router')
+const paymentRouter = require('./Router/payment-router')
 const authenticate = require('./Middlewares/authenticate');
 
 app.use(morgan('dev'));
@@ -24,6 +25,7 @@ app.use('/menu',menuRouter)
 app.use('/category',categoryRouter)
 app.use('/table',tableRouter)
 app.use('/orders',authenticate,orderRouter)
+app.use('/payment',paymentRouter)
 
 
 app.use('*',notFoundHandler);

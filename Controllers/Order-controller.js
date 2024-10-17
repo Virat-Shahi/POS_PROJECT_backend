@@ -8,7 +8,7 @@ exports.createOrder = async (req, res) => {
         const userId = req.user.id
         console.log(order)
         const orderItems = JSON.parse(order)
-        // Calculate total amount before creating the order
+        // // Calculate total amount before creating the order
         const totalAmount = orderItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
 
         const OrderCreate = await prisma.order.create({
