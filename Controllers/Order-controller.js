@@ -87,23 +87,70 @@ exports.getOrder = async (req, res, next) => {
     }
 }
 
+// exports.updateOrder = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const { tableId, order } = req.body;
+//         console.log("Received Order Data:",order)
+
+//         const orderItems = JSON.parse(order);
+
+//         // Calculate total amount upfront
+//         const totalAmount = orderItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+
+//         const updatedOrder = await prisma.order.update({
+//             where: { id: parseInt(id) },
+//             data: {
+//                 tableId : Number(tableId),
+//                 totalAmount,
+//                 orderItems: {
+//                     deleteMany: {},
+//                     create: orderItems.map(item => ({
+//                         menuItemId: item.menuItemId,
+//                         quantity: item.quantity,
+//                         price: item.price
+//                     }))
+//                 }
+//             },
+//             include: {
+//                 orderItems: {
+//                     include: {
+//                         menuItem: true
+//                     }
+//                 },
+//                 table: true,
+//                 payment: null
+//             }
+//         });
+
+//         res.json(updatedOrder);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Something went wrong' });
+//     }
+// };
 exports.updateOrder = async (req, res) => {
     try {
         const { id } = req.params;
-        const { tableId, orderItems } = req.body;
+        const { tableId, order } = req.body;
+        console.log("Received order update request:", { id, tableId, order });
+
+        const orderItems = JSON.parse(order);
+        console.log("Parsed order items:", orderItems);
 
         // Calculate total amount upfront
         const totalAmount = orderItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+        console.log("Calculated total amount:", totalAmount);
 
         const updatedOrder = await prisma.order.update({
             where: { id: parseInt(id) },
             data: {
-                tableId,
+                tableId: Number(tableId),
                 totalAmount,
                 orderItems: {
                     deleteMany: {},
                     create: orderItems.map(item => ({
-                        menuItemId: item.menuItemId,
+                        menuItemId: item.id,
                         quantity: item.quantity,
                         price: item.price
                     }))
@@ -120,13 +167,17 @@ exports.updateOrder = async (req, res) => {
             }
         });
 
+        console.log("Updated order:", updatedOrder);
         res.json(updatedOrder);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Something went wrong' });
+        console.error("Error updating order:", error);
+        res.status(500).json({ 
+            message: 'Something went wrong', 
+            error: error.message,
+            stack: error.stack
+        });
     }
 };
-
 exports.deleteOrder = async (req, res) => {
     try {
         const { id } = req.params;
