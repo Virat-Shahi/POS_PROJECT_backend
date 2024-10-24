@@ -62,7 +62,7 @@ exports.processPayment = async (req, res, next) => {
         });
 
         res.status(200).json({
-            message: 'Payment processing initiated',
+            message: 'Payment Successful',
             payment: payment
         })
     } catch (error) {
@@ -93,6 +93,22 @@ exports.getPaymentStatus = async (req, res, next) => {
 
     } catch (error) {
         console.log("Error getting payment status", error)
+        next(error)
+    }
+}
+
+exports.DeletePayment = async (req, res, next) => {
+    try {
+        const { paymentId } = req.params
+        const payment = await prisma.payment.delete({
+            where: { id: parseInt(paymentId) }
+        })
+        res.status(200).json({
+            message: "Payment deleted successfully",
+            payment: payment
+        })
+    } catch (error) {
+        console.log("Error deleting payment", error)
         next(error)
     }
 }

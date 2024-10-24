@@ -21,11 +21,11 @@ app.use('/auth',authRouter);
 
 
 // Apply authentication middleware to protected routes
-app.use('/menu',menuRouter)
-app.use('/category',categoryRouter)
-app.use('/table',tableRouter)
+app.use('/menu',authenticate,menuRouter)
+app.use('/category',authenticate,categoryRouter)
+app.use('/table',authenticate,tableRouter)
 app.use('/orders',authenticate,orderRouter)
-app.use('/payment',paymentRouter)
+app.use('/payment',authenticate,paymentRouter)
 
 
 app.use('*',notFoundHandler);
